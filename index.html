@@ -151,6 +151,8 @@
   .btn.primary:active{transform:scale(.97)}
   .btn.primary:disabled{background:#F1C6DA;box-shadow:none;cursor:not-allowed}
   .btn.ghost{background:transparent;color:var(--black);padding:15px 12px}
+  .bottom.wide .total{display:none}
+  .bottom.wide .btn.primary{flex:1}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
   @media(min-width:600px){
     h1{font-size:30px}
@@ -372,6 +374,7 @@ function go(n){
   $("#barFill").style.width = (n / TOTAL_STEPS * 100) + "%";
   $("#backBtn").style.display = (n > 1 && n < 8) ? "" : "none";
   $(".bottom").style.display = n === 8 ? "none" : "";
+  $(".bottom").classList.toggle("wide", n === 7 || n === 9);
   if(n === 2){
     $("#hrsEcho").textContent = state.time.hrs;
     $("#fitNote").innerHTML = `A ${state.time.hrs}-hour Wifey usually gets through <b>${FIT[state.time.hrs]}</b>. Add more and she'll start with your top priority.`;

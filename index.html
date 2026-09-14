@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Build Your Wifey — Hire A Wifey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#FF2D8A; --pink-dark:#E0136F; --pink-soft:#FFE6F1; --pink-tint:#FFF5F9;
+    --black:#141414; --ink:#2B2B2B; --muted:#7A7A7A; --line:#ECECEC; --white:#fff;
+    --radius:18px; --shadow:0 6px 24px rgba(20,20,20,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    background:var(--pink-tint); color:var(--ink); min-height:100dvh;
+    display:flex;flex-direction:column;
+  }
+  /* ---------- header ---------- */
+  header{
+    background:var(--black); color:var(--white); padding:14px 20px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .logo{font-weight:900;font-size:19px;letter-spacing:.2px}
+  .logo span{color:var(--pink)}
+  .tag{font-size:12px;color:#BDBDBD;font-weight:700}
+  /* ---------- progress ---------- */
+  .progress{background:var(--white);padding:14px 20px 12px;border-bottom:1px solid var(--line)}
+  .progress-top{display:flex;justify-content:space-between;font-size:13px;font-weight:800;color:var(--muted);margin-bottom:8px}
+  .progress-top b{color:var(--black)}
+  .bar{height:8px;background:var(--pink-soft);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--pink);border-radius:99px;transition:width .45s cubic-bezier(.4,0,.2,1)}
+  /* ---------- main ---------- */
+  main{flex:1;width:100%;max-width:560px;margin:0 auto;padding:22px 18px 140px}
+  .step{display:none;animation:in .35s ease}
+  .step.active{display:block}
+  @keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  h1{font-size:26px;font-weight:900;color:var(--black);line-height:1.15;margin-bottom:6px}
+  .sub{font-size:15px;color:var(--muted);font-weight:700;margin-bottom:18px;line-height:1.45}
+  /* ---------- cards ---------- */
+  .cards{display:grid;gap:12px}
+  .cards.two{grid-template-columns:1fr 1fr}
+  .card{
+    position:relative;background:var(--white);border:2.5px solid var(--line);border-radius:var(--radius);
+    padding:18px 16px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+    transition:border-color .18s,transform .12s,box-shadow .18s,background .18s;
+    box-shadow:var(--shadow);
+  }
+  .card:active{transform:scale(.975)}
+  .card.selected{border-color:var(--pink);background:var(--pink-soft);box-shadow:0 8px 28px rgba(255,45,138,.18)}
+  .check{
+    position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;
+    background:var(--pink);color:#fff;display:grid;place-items:center;font-size:15px;font-weight:900;
+    opacity:0;transform:scale(.5);transition:all .18s;
+  }
+  .card.selected .check{opacity:1;transform:scale(1)}
+  /* time cards */
+  .time{display:flex;align-items:center;gap:16px}
+  .time .hrs{
+    width:64px;height:64px;border-radius:16px;background:var(--black);color:#fff;display:grid;place-items:center;
+    font-weight:900;font-size:22px;line-height:1;flex-shrink:0;
+  }
+  .time .hrs small{font-size:11px;font-weight:800;color:var(--pink);letter-spacing:.5px}
+  .card.selected .time .hrs{background:var(--pink)}
+  .card.selected .time .hrs small{color:#fff}
+  .time .info{flex:1;min-width:0}
+  .time .price{font-size:22px;font-weight:900;color:var(--black)}
+  .time .fit{font-size:13px;color:var(--muted);font-weight:700;margin-top:2px}
+  .badge{
+    display:inline-block;font-size:10.5px;font-weight:900;letter-spacing:.6px;text-transform:uppercase;
+    background:var(--black);color:#fff;padding:4px 8px;border-radius:99px;margin-bottom:6px;
+  }
+  .card.selected .badge{background:var(--pink)}
+  /* task cards */
+  .task{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:16px 14px;min-height:118px}
+  .task .ico{font-size:30px;line-height:1}
+  .task .name{font-weight:800;font-size:15px;color:var(--black);line-height:1.2}
+  /* priority list */
+  .prio .card{display:flex;align-items:center;gap:14px;padding:16px}
+  .prio .ico{font-size:26px}
+  .prio .name{font-weight:800;font-size:16px;color:var(--black)}
+  .radio{width:24px;height:24px;border-radius:50%;border:2.5px solid #D6D6D6;margin-left:auto;flex-shrink:0;display:grid;place-items:center}
+  .card.selected .radio{border-color:var(--pink)}
+  .card.selected .radio::after{content:"";width:12px;height:12px;border-radius:50%;background:var(--pink)}
+  /* notes */
+  .note{
+    margin-top:16px;background:var(--white);border:1.5px dashed #F7B9D5;border-radius:14px;padding:12px 14px;
+    font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.45;display:flex;gap:10px;align-items:flex-start;
+  }
+  .note .n-ico{font-size:18px;flex-shrink:0}
+  .note b{color:var(--pink-dark)}
+  .count{font-size:14px;font-weight:800;color:var(--pink-dark);margin:14px 0 4px;min-height:20px}
+  /* ---------- bottom bar ---------- */
+  .bottom{
+    position:fixed;left:0;right:0;bottom:0;background:var(--white);border-top:1px solid var(--line);
+    padding:12px 18px calc(12px + env(safe-area-inset-bottom));box-shadow:0 -8px 30px rgba(20,20,20,.07);
+  }
+  .bottom-in{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:12px}
+  .total{flex:1;line-height:1.1}
+  .total .lbl{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+  .total .amt{font-size:24px;font-weight:900;color:var(--black);transition:transform .2s}
+  .total .amt.pop{transform:scale(1.12)}
+  .total .amt small{font-size:13px;color:var(--muted);font-weight:800}
+  .btn{
+    border:0;border-radius:14px;padding:15px 22px;font:inherit;font-weight:900;font-size:16px;cursor:pointer;
+    transition:all .18s;-webkit-tap-highlight-color:transparent;
+  }
+  .btn.primary{background:var(--pink);color:#fff;box-shadow:0 8px 22px rgba(255,45,138,.35)}
+  .btn.primary:active{transform:scale(.97)}
+  .btn.primary:disabled{background:#F1C6DA;box-shadow:none;cursor:not-allowed}
+  .btn.ghost{background:transparent;color:var(--black);padding:15px 12px}
+  /* end screen */
+  .end{text-align:center;padding:30px 10px}
+  .end .big{font-size:64px;margin-bottom:10px}
+  .end h1{margin-bottom:8px}
+  .end .steps{margin:22px auto 0;text-align:left;display:inline-block;font-weight:700;color:var(--muted);line-height:1.9;font-size:14px}
+  .end .steps s{color:#BDBDBD}
+  .end .steps b{color:var(--black)}
+  @media(min-width:600px){
+    h1{font-size:30px}
+    .cards.two{grid-template-columns:1fr 1fr 1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Hire A <span>Wifey</span></div>
+  <div class="tag">We Take Care of Home.</div>
+</header>
+
+<div class="progress">
+  <div class="progress-top"><span>Build Your Wifey</span><span>Step <b id="stepNum">1</b> of 9</span></div>
+  <div class="bar"><i id="barFill"></i></div>
+</div>
+
+<main>
+
+  <!-- STEP 1 -->
+  <section class="step active" data-step="1">
+    <h1>How much Wifey time do you need?</h1>
+    <p class="sub">Pick a block of time. Your Wifey works through your to-do list in that time — the price never changes based on how many tasks you add.</p>
+    <div class="cards" id="timeCards"></div>
+    <div class="note"><span class="n-ico">💡</span><span>Not sure? <b>3 hours</b> is our most popular pick — enough for a full clean plus a load of laundry.</span></div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step" data-step="2">
+    <h1>Build Your Wifey To-Do List</h1>
+    <p class="sub">Tap everything you'd love help with. Pick as many as you like — your Wifey will work through them in your <b id="hrsEcho">3</b> hours.</p>
+    <div class="count" id="taskCount"></div>
+    <div class="cards two" id="taskCards"></div>
+    <div class="note"><span class="n-ico">⏱️</span><span id="fitNote">A 3-hour Wifey usually gets through <b>3–4 of these</b>. Add more and she'll start with your top priority.</span></div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step" data-step="3">
+    <h1>What's your #1 priority?</h1>
+    <p class="sub">If time runs short, this is what your Wifey does first.</p>
+    <div class="cards prio" id="prioCards"></div>
+  </section>
+
+  <!-- END OF DEMO -->
+  <section class="step end" data-step="4">
+    <div class="big">💗</div>
+    <h1>That's the demo!</h1>
+    <p class="sub">Steps 1–3 are live above. The full nine-step journey gets built on award.</p>
+    <div class="steps">
+      <s>1. Choose your Wifey time</s><br>
+      <s>2. Build your To-Do List</s><br>
+      <s>3. Choose your #1 priority</s><br>
+      <b>4.</b> Choose frequency<br>
+      <b>5.</b> Preferred day &amp; time<br>
+      <b>6.</b> Your details &amp; property<br>
+      <b>7.</b> Review your Wifey request<br>
+      <b>8.</b> Submit<br>
+      <b>9.</b> Friendly confirmation
+    </div>
+  </section>
+
+</main>
+
+<div class="bottom">
+  <div class="bottom-in">
+    <button class="btn ghost" id="backBtn" style="display:none">← Back</button>
+    <div class="total">
+      <div class="lbl">Your Wifey</div>
+      <div class="amt" id="amt">—</div>
+    </div>
+    <button class="btn primary" id="nextBtn" disabled>Continue →</button>
+  </div>
+</div>
+
+<script>
+/* ===== Editable content (in the real build these live in the WordPress dashboard) ===== */
+const TIMES = [
+  { hrs:2, price:129, fit:"A quick reset — tidy, bathrooms, floors" },
+  { hrs:3, price:179, fit:"Full clean plus a load of laundry", popular:true },
+  { hrs:4, price:219, fit:"Full clean, laundry and ironing" },
+  { hrs:5, price:269, fit:"The lot — clean, laundry, meal prep, organising" },
+];
+const TASKS = [
+  { id:"clean",  ico:"🧽", name:"General Household Cleaning" },
+  { id:"laundry",ico:"🧺", name:"Laundry" },
+  { id:"iron",   ico:"👔", name:"Ironing" },
+  { id:"beds",   ico:"🛏️", name:"Making Beds / Changing Linen" },
+  { id:"meal",   ico:"🥗", name:"Meal Prep" },
+  { id:"org",    ico:"🗂️", name:"Home Organisation" },
+  { id:"tidy",   ico:"✨", name:"Tidying Up" },
+  { id:"other",  ico:"💁‍♀️", name:"Other Household Help" },
+];
+const FIT = { 2:"2–3 of these", 3:"3–4 of these", 4:"4–6 of these", 5:"most of these" };
+
+/* ===== State ===== */
+const state = { step:1, time:null, tasks:new Set(), prio:null };
+const $ = s => document.querySelector(s);
+const TOTAL_STEPS = 9;
+
+/* ===== Render cards ===== */
+$("#timeCards").innerHTML = TIMES.map(t => `
+  <div class="card" data-hrs="${t.hrs}">
+    <div class="check">✓</div>
+    <div class="time">
+      <div class="hrs">${t.hrs}<small>HOURS</small></div>
+      <div class="info">
+        ${t.popular ? '<span class="badge">Most popular</span>' : ''}
+        <div class="price">$${t.price}</div>
+        <div class="fit">${t.fit}</div>
+      </div>
+    </div>
+  </div>`).join("");
+
+$("#taskCards").innerHTML = TASKS.map(t => `
+  <div class="card task" data-task="${t.id}">
+    <div class="check">✓</div>
+    <div class="ico">${t.ico}</div>
+    <div class="name">${t.name}</div>
+  </div>`).join("");
+
+/* ===== Interactions ===== */
+$("#timeCards").addEventListener("click", e => {
+  const c = e.target.closest(".card"); if(!c) return;
+  document.querySelectorAll("#timeCards .card").forEach(x => x.classList.remove("selected"));
+  c.classList.add("selected");
+  state.time = TIMES.find(t => t.hrs == c.dataset.hrs);
+  updateTotal(true); updateNav();
+});
+
+$("#taskCards").addEventListener("click", e => {
+  const c = e.target.closest(".card"); if(!c) return;
+  c.classList.toggle("selected");
+  c.classList.contains("selected") ? state.tasks.add(c.dataset.task) : state.tasks.delete(c.dataset.task);
+  if(state.prio && !state.tasks.has(state.prio)) state.prio = null;
+  updateTaskCount(); updateNav();
+});
+
+$("#prioCards").addEventListener("click", e => {
+  const c = e.target.closest(".card"); if(!c) return;
+  document.querySelectorAll("#prioCards .card").forEach(x => x.classList.remove("selected"));
+  c.classList.add("selected");
+  state.prio = c.dataset.task;
+  updateNav();
+});
+
+$("#nextBtn").addEventListener("click", () => go(state.step + 1));
+$("#backBtn").addEventListener("click", () => go(state.step - 1));
+
+/* ===== Step logic ===== */
+function go(n){
+  state.step = n;
+  document.querySelectorAll(".step").forEach(s => s.classList.toggle("active", +s.dataset.step === n));
+  $("#stepNum").textContent = Math.min(n, TOTAL_STEPS);
+  $("#barFill").style.width = (Math.min(n, TOTAL_STEPS) / TOTAL_STEPS * 100) + "%";
+  $("#backBtn").style.display = n > 1 && n < 4 ? "" : "none";
+  if(n === 2){
+    $("#hrsEcho").textContent = state.time.hrs;
+    $("#fitNote").innerHTML = `A ${state.time.hrs}-hour Wifey usually gets through <b>${FIT[state.time.hrs]}</b>. Add more and she'll start with your top priority.`;
+    updateTaskCount();
+  }
+  if(n === 3){
+    const chosen = TASKS.filter(t => state.tasks.has(t.id));
+    $("#prioCards").innerHTML = chosen.map(t => `
+      <div class="card ${state.prio===t.id?'selected':''}" data-task="${t.id}">
+        <div class="ico">${t.ico}</div><div class="name">${t.name}</div><div class="radio"></div>
+      </div>`).join("");
+  }
+  if(n === 4){ $("#nextBtn").textContent = "Start over"; $("#nextBtn").onclick = () => location.reload(); }
+  updateNav();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function updateNav(){
+  const b = $("#nextBtn");
+  if(state.step === 1) b.disabled = !state.time;
+  else if(state.step === 2) b.disabled = state.tasks.size === 0;
+  else if(state.step === 3) b.disabled = !state.prio;
+  else b.disabled = false;
+  if(state.step < 4) b.textContent = "Continue →";
+}
+
+function updateTotal(pop){
+  const a = $("#amt");
+  a.innerHTML = state.time ? `$${state.time.price} <small>· ${state.time.hrs} hrs</small>` : "—";
+  if(pop){ a.classList.add("pop"); setTimeout(() => a.classList.remove("pop"), 200); }
+}
+
+function updateTaskCount(){
+  const n = state.tasks.size;
+  $("#taskCount").textContent = n === 0 ? "Nothing picked yet — tap a card to add it" : `${n} task${n>1?"s":""} on your list · still $${state.time.price}`;
+}
+</script>
+</body>
+</html>
